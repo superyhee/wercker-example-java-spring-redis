@@ -1,10 +1,10 @@
 # getting started java spring redis
 
 
-[![wercker status](https://app.wercker.com/status/52084dac602bd0033c8ddec62ce72fd1/m "wercker status")](https://app.wercker.com/project/bykey/52084dac602bd0033c8ddec62ce72fd1)
+[![wercker status](https://app.wercker.com/status/bd30bf8bc30b7fc37997c106f1504538/m "wercker status")](https://app.wercker.com/project/bykey/bd30bf8bc30b7fc37997c106f1504538)
 
 ## Spring-boot version
-                        git ini
+             
 This is an absolutely minimal example of a Java-based multi-docker application, under Continuous Integration by
 [Wercker](http://wercker.com/). It consists of two containers:    
 

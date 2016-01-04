@@ -9,15 +9,9 @@ dev:
         code: 'mvn package'
     - script:
         code: 'mvn spring-boot:run'
-#build:
-#  services:
-#    - id: redis
-#  steps:
-#  - script:
-#      code: 'env'
-#  - script:
-#      code: 'mvn -e compile'
-#  - script:
-#      code: export PORT='8082'
-#  - script:
-#      code: 'mvn test'
+build:
+  services:
+    - id: redis
+  steps:
+    - script:
+        code: 'mvn package'
