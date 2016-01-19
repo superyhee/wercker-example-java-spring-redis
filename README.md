@@ -46,6 +46,25 @@ The IP is typically 192.168.99.100. To make sure:
     
     $ env|grep 'DOCKER_HOST'
     
+## Building and Pushing your Docker image
+
+First build the project using Maven
+
+    $ mvn package  
+    
+This should have crated a super jar in the target folder:
+
+    target/wercker-example-java-spring-redis.jar
+    
+Next build your docker image
+
+    $ docker build -t combient/wercker-example-java-spring-redis .
+    
+As an alternative, build the docker image using maven.
+
+    
+    
+    
 ## Known issues
 
 * With the current setup it is not practical to use watch/reload functionality of Wercker Dev Mode. We are looking into this. The solution is likely to be made available as a Wercker Custom Step
