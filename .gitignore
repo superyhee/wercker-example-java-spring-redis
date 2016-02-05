@@ -1,4 +1,6 @@
 target
+clusters
+*env
 .idea
 *.iml
 _*

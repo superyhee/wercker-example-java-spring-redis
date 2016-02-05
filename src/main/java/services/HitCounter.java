@@ -1,11 +1,14 @@
 package services;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class HitCounter {
-    public static final int REDIS_PORT =6379;
-    public static final String REDIS_ADDR_KEY = "REDIS_PORT_" + REDIS_PORT + "_TCP_ADDR";
-
+    private static final String DETAULT_REDIS_HOST = "redis";
     private static HitCounter ourInstance = new HitCounter();
 
     public static HitCounter getInstance() {
@@ -13,14 +16,49 @@ public class HitCounter {
     }
 
     private String key = "counter";
-    private Jedis jedis;
+    private JedisPool pool;
 
     private HitCounter() {
-        jedis = new Jedis(System.getenv(REDIS_ADDR_KEY));
-        jedis.set(key, "0");
+
+        String hostname = DETAULT_REDIS_HOST;
+        String getConfFrom = System.getenv("GET_CONF_FROM");
+        if ("env".equals(getConfFrom)) {
+            hostname = System.getenv("REDIS_HOST");
+        }
+
+        System.out.println("Connecting to redis at host '" + hostname + "'");
+
+        InetAddress address;
+        try {
+            address = InetAddress.getByName(hostname);
+            System.out.println("IP : " + address.getHostAddress());
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        pool = new JedisPool(new JedisPoolConfig(), hostname);
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            jedis.set(key, "0");
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
     }
 
     public Long incr() {
-        return jedis.incr(key);
+        Long returnValue = null;
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            returnValue = jedis.incr(key);
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return returnValue;
     }
 }

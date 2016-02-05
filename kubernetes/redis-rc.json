@@ -1,0 +1,41 @@
+{
+  "kind": "ReplicationController",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "redis",
+    "labels": {
+      "run": "redis"
+    }
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "run": "redis"
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "run": "redis"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "redis",
+            "image": "redis",
+            "ports": [
+              {
+                "containerPort": 6379,
+                "protocol": "TCP"
+              }
+            ],
+            "imagePullPolicy": "IfNotPresent"
+          }
+        ],
+        "restartPolicy": "Always",
+        "terminationGracePeriodSeconds": 30,
+        "dnsPolicy": "ClusterFirst"
+      }
+    }
+  }
+}

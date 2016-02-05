@@ -46,25 +46,50 @@ The IP is typically 192.168.99.100. To make sure:
     
     $ env|grep 'DOCKER_HOST'
     
-## Building and Pushing your Docker image
+# Deployment to Google Container Engine / Kubernetes
 
-First build the project using Maven
+## Setup the initial environment
 
-    $ mvn package  
-    
-This should have crated a super jar in the target folder:
+To get started with GKE follow the instructions [here](https://cloud.google.com/container-engine/docs/before-you-begin) 
 
-    target/wercker-example-java-spring-redis.jar
-    
-Next build your docker image
+If you haven't already - create the cluster      
 
-    $ docker build -t combient/wercker-example-java-spring-redis .
+    $ gcloud container clusters create ${POD_NAME} \             
+        --num-nodes 1 \             
+        --machine-type g1-small    
+   
+Create your redis Pod with a singe instance
     
-As an alternative, build the docker image using maven.
+    $ kubectl create -f kubernetes/redis-rc.json         
+    
+Then attach a service              
+    
+    $ kubectl create -f kubernetes/redis-svc.json
 
+Next create the pod for the example service
+
+    $ kubectl create -f kubernetes/java-spring-redis-rc.json
     
+And create and expose this service as a Load Balancer to the external world
+
+    $ kubectl create -f kubernetes/java-spring-redis-svc.json  
     
+## Building and uprading with Wercker
+
+You can use Wercker to build and deploy from the command line. 
+
+    $ wercker build
     
+will build the app and
+
+    $ wercker deploy
+    
+will build the container and push it to docker hub. Finally
+
+    $ wercker deploy --deploy-target upgrade
+    
+will replace the service on GKE with a new version.
+
 ## Known issues
 
 * With the current setup it is not practical to use watch/reload functionality of Wercker Dev Mode. We are looking into this. The solution is likely to be made available as a Wercker Custom Step

@@ -15,3 +15,45 @@ build:
   steps:
     - script:
         code: 'mvn package'
+    - script:
+        name: create java-spring-redis-rc.json
+        code: ./kubernetes/create-java-spring-redis-rc.sh
+    - script:
+        name: copy binary
+        code: cp java-spring-redis-rc.json "$WERCKER_OUTPUT_DIR"
+deploy:
+    steps:
+    - script:
+        code: cp $WERCKER_SOURCE_DIR/target/wercker-example-java-spring-redis.jar /app.jar
+    - internal/docker-push:
+        username: $DOCKERHUB_USERNAME
+        password: $DOCKERHUB_PASSWORD
+        cmd: "java -Djava.security.egd=file:/dev/./urandom -jar /app.jar"
+        repository: combient/wercker-example-java-spring-redis
+        tag: ${WERCKER_GIT_COMMIT}
+        registry: https://registry.hub.docker.com
+    upgrade:
+    - script:
+        name: create java-spring-redis-rc.json
+        code: ./kubernetes/create-java-spring-redis-rc.sh
+    - kubectl:
+        server: $KUBERNETES_MASTER
+        username: $KUBERNETES_USERNAME
+        password: $KUBERNETES_PASSWORD
+        insecure-skip-tls-verify: true
+        command: delete rc java-spring-redis
+    - kubectl:
+        debug: "true"
+        server: $KUBERNETES_MASTER
+        username: $KUBERNETES_USERNAME
+        password: $KUBERNETES_PASSWORD
+        insecure-skip-tls-verify: true
+        command: create -f java-spring-redis-rc.json
+    rolling-update:
+    - kubectl:
+        server: $KUBERNETES_MASTER
+        username: $KUBERNETES_USERNAME
+        password: $KUBERNETES_PASSWORD
+        insecure-skip-tls-verify: true
+        command: rolling-update java-spring-redis
+        image: combient/wercker-example-java-spring-redis:${WERCKER_GIT_COMMIT}
