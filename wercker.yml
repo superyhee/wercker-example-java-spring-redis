@@ -43,7 +43,7 @@ deploy:
         insecure-skip-tls-verify: true
         command: create -f java-spring-redis-rc.json
     rolling-update:
-   echo - kubectl:
+    - kubectl:
         server: $KUBERNETES_MASTER
         username: $KUBERNETES_USERNAME
         password: $KUBERNETES_PASSWORD
