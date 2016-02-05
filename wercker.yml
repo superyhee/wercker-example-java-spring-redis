@@ -15,12 +15,6 @@ build:
   steps:
     - script:
         code: 'mvn package'
-    - script:
-        name: create java-spring-redis-rc.json
-        code: ./kubernetes/create-java-spring-redis-rc.sh
-    - script:
-        name: copy binary
-        code: cp java-spring-redis-rc.json "$WERCKER_OUTPUT_DIR"
 deploy:
     steps:
     - script:
@@ -35,7 +29,7 @@ deploy:
     upgrade:
     - script:
         name: create java-spring-redis-rc.json
-        code: ./kubernetes/create-java-spring-redis-rc.sh
+        code: ${WERCKER_SOURCE_DIR}/kubernetes/create-java-spring-redis-rc.sh
     - kubectl:
         server: $KUBERNETES_MASTER
         username: $KUBERNETES_USERNAME
@@ -43,14 +37,13 @@ deploy:
         insecure-skip-tls-verify: true
         command: delete rc java-spring-redis
     - kubectl:
-        debug: "true"
         server: $KUBERNETES_MASTER
         username: $KUBERNETES_USERNAME
         password: $KUBERNETES_PASSWORD
         insecure-skip-tls-verify: true
         command: create -f java-spring-redis-rc.json
     rolling-update:
-    - kubectl:
+   echo - kubectl:
         server: $KUBERNETES_MASTER
         username: $KUBERNETES_USERNAME
         password: $KUBERNETES_PASSWORD
