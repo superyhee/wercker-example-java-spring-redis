@@ -15,8 +15,6 @@ build:
   steps:
     - script:
         code: 'mvn package'
-deploy:
-    steps:
     - script:
         code: cp $WERCKER_SOURCE_DIR/target/wercker-example-java-spring-redis.jar /app.jar
     - internal/docker-push:
@@ -26,6 +24,7 @@ deploy:
         repository: combient/wercker-example-java-spring-redis
         tag: ${WERCKER_GIT_COMMIT}
         registry: https://registry.hub.docker.com
+deploy:
     upgrade:
     - script:
         name: create java-spring-redis-rc.json
