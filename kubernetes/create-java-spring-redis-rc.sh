@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-#!/bin/bash
-
 cat > java-spring-redis-rc.json <<EOF
 {
   "kind": "ReplicationController",
