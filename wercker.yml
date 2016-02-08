@@ -25,10 +25,17 @@ build:
         tag: ${WERCKER_GIT_COMMIT}
         registry: https://registry.hub.docker.com
 deploy:
+    debug:
+    - script:
+        code: echo ${WERCKER_GIT_COMMIT}
     upgrade:
     - script:
         name: create java-spring-redis-rc.json
         code: ${WERCKER_SOURCE_DIR}/kubernetes/create-java-spring-redis-rc.sh
+    - script:
+        code: echo ${WERCKER_GIT_COMMIT}
+    - script:
+        code: cat java-spring-redis-rc.json
     - kubectl:
         server: $KUBERNETES_MASTER
         username: $KUBERNETES_USERNAME
