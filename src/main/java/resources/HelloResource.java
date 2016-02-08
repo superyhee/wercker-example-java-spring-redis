@@ -10,7 +10,7 @@ import services.HitCounter;
 @EnableAutoConfiguration
 public class HelloResource {
 
-    public static final String RESPONSE_FORMAT = "<h1>Hello World</h1><br>This page has been hit %d times FOO";
+    public static final String RESPONSE_FORMAT = "<h1>Hello World</h1><br>This page has been hit %d times";
 
     @RequestMapping("/hello")
     public String handleGreeting() {
