@@ -93,8 +93,7 @@ will replace the service on GKE with a new version.
 ## Known issues
 
 * With the current setup it is not practical to use watch/reload functionality of Wercker Dev Mode. We are looking into this. The solution is likely to be made available as a Wercker Custom Step
-* The JUnit test starts an Embedded Jetty and waits for 6 seconds for it to start. A better solution for starting and stopping Jetty between unit tests will be required.
-                                                          
+                                                         
 For further details refer to the source code as well as to the Wercker, Docker and Virtualbox documentation.
     
 
