@@ -1,0 +1,21 @@
+{
+  "kind": "Route",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "java-spring-redis-route",
+    "creationTimestamp": null,
+    "labels": {
+      "run": "java-spring-redis"
+    }
+  },
+  "spec": {
+    "path": "/hello",
+    "to": {
+      "kind": "Service",
+      "name": "java-spring-redis"
+    },
+    "port": {
+      "targetPort": "8080-tcp"
+    }
+  }
+}
