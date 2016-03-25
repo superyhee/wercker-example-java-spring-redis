@@ -6,9 +6,9 @@ dev:
     - script:
         code: export PORT='8082'
     - script:
-        code: 'mvn package'
+        code: 'mvn -Dmaven.repo.local=$WERCKER_CACHE_DIR package'
     - script:
-        code: 'mvn spring-boot:run'
+        code: 'mvn -Dmaven.repo.local=$WERCKER_CACHE_DIR spring-boot:run'
 build:
   services:
     - id: redis
